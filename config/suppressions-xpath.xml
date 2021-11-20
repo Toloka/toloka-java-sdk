@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionXpathFilter Experimental Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2_xpath_experimental.dtd">
+
+<suppressions>
+    <suppress-xpath checks="AbbreviationAsWordInName"
+                    files="TolokaRequestIOException.java"
+                    query="//CLASS_DEF/IDENT"/>
+    <suppress-xpath checks="MemberName"
+                    files="UserSkillClientImpl.java"
+                    query="//VARIABLE_DEF/IDENT[@text='skill_id' or @text='user_id']"/>
+</suppressions>

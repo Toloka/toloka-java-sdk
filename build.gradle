@@ -1,0 +1,144 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'checkstyle'
+
+compileJava.options.encoding = 'UTF-8'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+group = 'ai.toloka'
+version = version + (Boolean.valueOf(System.getProperty("isRelease", "false")) ? "" : "-SNAPSHOT")
+configurations {
+    archives
+    ascSignatures
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'javax.xml.bind:jaxb-api:2.3.1'
+    
+    compile 'org.slf4j:slf4j-api:1.7.32'
+
+    compile 'org.apache.httpcomponents:httpclient:4.5.13'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+
+    testCompile 'org.codehaus.groovy:groovy-all:2.5.14'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.spockframework:spock-unitils:2.0-groovy-2.5'
+
+    testCompile 'org.objenesis:objenesis:2.6'
+    testCompile 'cglib:cglib:3.2.12'
+    testCompile 'org.ow2.asm:asm-all:5.2'
+
+    testCompile 'org.mock-server:mockserver-netty:3.10.8'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+def manifestDefinition = manifest {
+    attributes('Implementation-Vendor': project.group,
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version)
+}
+
+checkstyle {
+    toolVersion '8.45'
+    configDir rootProject.file('config')
+    ignoreFailures false
+    showViolations true
+}
+
+jar {
+    manifest {
+        from manifestDefinition
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+signArchives.enabled = Boolean.valueOf(System.getProperty("isRelease", "false"))
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment ->
+                    signing.signPom(deployment)
+            }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: System.getenv("OSSRH_USERNAME"), password: System.getenv("OSSRH_PASSWORD"))
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: System.getenv("OSSRH_USERNAME"), password: System.getenv("OSSRH_PASSWORD"))
+            }
+
+            pom.project {
+                name 'Toloka Java SDK'
+                packaging 'jar'
+                description 'Toloka has a powerful open API, it allows you to integrate an on-demand workforce directly into your processes, and to build scalable and fully automated human-in-the-loop ML pipelines.'
+                url 'https://toloka.ai'
+
+                scm {
+                    connection 'scm:git:git://github.com/Toloka/toloka-java-sdk.git'
+                    developerConnection 'scm:git:ssh://github.com:Toloka/toloka-java-sdk.git'
+                    url 'http://github.com/Toloka/toloka-java-sdk/tree/master'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'timurt'
+                        name 'Timur Tibeyev'
+                        email 'timurtibeyev@yandex-team.ru'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task printVersion {
+    doLast {
+        println('groupId: ' + project.group)
+        println('artifactId: ' + archivesBaseName)
+        println('version: ' + project.version)
+    }
+}
+
+uploadArchives.finalizedBy(printVersion)
