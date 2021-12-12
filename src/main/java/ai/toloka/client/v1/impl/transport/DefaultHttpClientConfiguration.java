@@ -16,7 +16,10 @@
 
 package ai.toloka.client.v1.impl.transport;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.util.Properties;
 
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
@@ -38,11 +41,14 @@ public class DefaultHttpClientConfiguration {
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String AUTHORIZATION_OAUTH_HEADER_FORMAT = "OAuth %s";
 
+    public static final String USER_AGENT_FORMAT = "toloka-java-sdk/%s";
+
     public static HttpClient buildDefaultClient(String oauthToken) {
         return HttpClientBuilder.create()
                 .setMaxConnTotal(DEFAULT_MAX_CONNECTIONS)
                 .setMaxConnPerRoute(DEFAULT_MAX_CONNECTIONS)
                 .setDefaultRequestConfig(getDefaultRequestConfig())
+                .setUserAgent(getUserAgent())
                 .setDefaultHeaders(singletonList(getDefaultAuthorizationHeader(oauthToken)))
                 .build();
     }
@@ -58,5 +64,22 @@ public class DefaultHttpClientConfiguration {
     public static Header getDefaultAuthorizationHeader(String oauthToken) {
         return new BasicHeader(AUTHORIZATION_HEADER_NAME, String.format(AUTHORIZATION_OAUTH_HEADER_FORMAT,
                 EncodeUtil.encodeNonAscii(oauthToken)));
+    }
+
+    public static String getUserAgent() {
+        return String.format(USER_AGENT_FORMAT, EncodeUtil.encodeNonAscii(getVersion()));
+    }
+
+    private static String getVersion() {
+        Properties prop = new Properties();
+        try {
+            InputStream input = DefaultHttpClientConfiguration.class
+                    .getClassLoader()
+                    .getResourceAsStream("version.properties");
+            prop.load(input);
+        } catch (IOException ignored) {
+            // ignored
+        }
+        return prop.getProperty("version", "undefined");
     }
 }
