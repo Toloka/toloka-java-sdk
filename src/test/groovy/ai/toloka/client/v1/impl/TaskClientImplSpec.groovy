@@ -230,6 +230,100 @@ class TaskClientImplSpec extends AbstractClientSpec {
         }
     }
 
+    def "patchTask; update known solutions"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/tasks/task-1').withMethod('PATCH')
+                        .withBody(new JsonBuilder([known_solutions: [[output_values: [color: 'green'], correctness_weight: 0.0]]]) as String), once())
+                .respond(response(new JsonBuilder(task_map_with_readonly().with {
+                    it.known_solutions = [
+                            [
+                                    output_values     : [
+                                            color: 'green'
+                                    ],
+                                    correctness_weight: 0.0
+                            ]
+                    ]
+                    it
+                }) as String))
+
+        when:
+        def result = factory.taskClient.patchTask(
+                'task-1',
+                new TaskPatch(knownSolutions: [new KnownSolution([color: 'green'], 0.0)]))
+
+        then:
+        matches result.result, task_with_readonly().with {
+            knownSolutions = [new KnownSolution([color: 'green'], 0.0)]
+            it
+        }
+    }
+
+    def "patchTask; update message on unknown solution"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/tasks/task-1').withMethod('PATCH')
+                        .withBody(new JsonBuilder([message_on_unknown_solution: 'useful message']) as String), once())
+                .respond(response(new JsonBuilder(task_map_with_readonly().with {
+                    it.message_on_unknown_solution = 'useful message'
+                    it
+                }) as String))
+
+        when:
+        def result = factory.taskClient.patchTask(
+                'task-1',
+                new TaskPatch(messageOnUnknownSolution: 'useful message')
+        )
+
+        then:
+        matches result.result, task_with_readonly().with {
+            messageOnUnknownSolution = 'useful message'
+            it
+        }
+    }
+
+    def "patchTask; set overlap and update known solutions and update message on unknown solution"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/tasks/task-1').withMethod('PATCH')
+                        .withBody(new JsonBuilder([
+                                overlap: 10,
+                                known_solutions: [[output_values: [color: 'green'], correctness_weight: 0.0]],
+                                message_on_unknown_solution: 'useful message'
+                        ]) as String), once())
+                .respond(response(new JsonBuilder(task_map_with_readonly().with {
+                    it.overlap = 10
+                    it.known_solutions = [
+                            [
+                                    output_values     : [
+                                            color: 'green'
+                                    ],
+                                    correctness_weight: 0.0
+                            ]
+                    ]
+                    it.message_on_unknown_solution = 'useful message'
+                    it
+                }) as String))
+
+        when:
+        def result = factory.taskClient.patchTask(
+                'task-1',
+                new TaskPatch(
+                        overlap: 10,
+                        knownSolutions: [new KnownSolution([color: 'green'], 0.0)],
+                        messageOnUnknownSolution: 'useful message'
+                )
+        )
+
+        then:
+        matches result.result, task_with_readonly().with {
+            overlap = 10
+            knownSolutions = [new KnownSolution([color: 'green'], 0.0)]
+            messageOnUnknownSolution = 'useful message'
+            it
+        }
+    }
+
     def 'setTaskOverlapOrMin'() {
         setup:
         new MockServerClient('localhost', 8083)

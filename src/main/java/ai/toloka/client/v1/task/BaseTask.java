@@ -72,8 +72,16 @@ public class BaseTask {
         return knownSolutions;
     }
 
+    public void setKnownSolutions(List<KnownSolution> knownSolutions) {
+        this.knownSolutions = knownSolutions;
+    }
+
     public String getMessageOnUnknownSolution() {
         return messageOnUnknownSolution;
+    }
+
+    public void setMessageOnUnknownSolution(String messageOnUnknownSolution) {
+        this.messageOnUnknownSolution = messageOnUnknownSolution;
     }
 
     public TaskLocalizationConfig getLocalizationConfig() {

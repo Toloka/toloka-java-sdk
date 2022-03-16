@@ -27,6 +27,12 @@ public class TaskPatch {
     @JsonProperty("baseline_solutions")
     private List<BaselineSolution> baselineSolutions;
 
+    @JsonProperty("known_solutions")
+    private List<KnownSolution> knownSolutions;
+
+    @JsonProperty("message_on_unknown_solution")
+    private String messageOnUnknownSolution;
+
     public Integer getOverlap() {
         return overlap;
     }
@@ -41,5 +47,21 @@ public class TaskPatch {
 
     public void setBaselineSolutions(List<BaselineSolution> baselineSolutions) {
         this.baselineSolutions = baselineSolutions;
+    }
+
+    public String getMessageOnUnknownSolution() {
+        return messageOnUnknownSolution;
+    }
+
+    public void setMessageOnUnknownSolution(String messageOnUnknownSolution) {
+        this.messageOnUnknownSolution = messageOnUnknownSolution;
+    }
+
+    public List<KnownSolution> getKnownSolutions() {
+        return knownSolutions;
+    }
+
+    public void setKnownSolutions(List<KnownSolution> knownSolutions) {
+        this.knownSolutions = knownSolutions;
     }
 }
