@@ -115,6 +115,9 @@ public class Pool {
     @JsonProperty("last_close_reason")
     private PoolCloseReason lastCloseReason;
 
+    @JsonProperty("speed_quality_balance")
+    private AbstractSpeedQualityBalance speedQualityBalance;
+
     @JsonCreator
     public Pool(@JsonProperty("project_id") String projectId,
                 @JsonProperty("private_name") String privateName,
@@ -329,5 +332,13 @@ public class Pool {
 
     public PoolTrainingConfig getTrainingConfig() {
         return trainingConfig;
+    }
+
+    public AbstractSpeedQualityBalance getSpeedQualityBalance() {
+        return speedQualityBalance;
+    }
+
+    public void setSpeedQualityBalance(AbstractSpeedQualityBalance speedQualityBalance) {
+        this.speedQualityBalance = speedQualityBalance;
     }
 }
