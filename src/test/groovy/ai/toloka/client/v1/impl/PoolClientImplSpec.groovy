@@ -81,6 +81,34 @@ class PoolClientImplSpec extends AbstractClientSpec {
         matches result, pool_with_readonly()
     }
 
+    def "getPool with TopPercentageSpeedQualityBalance"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/pools/21'), once())
+                .respond(response(new JsonBuilder(pool_map_with_readonly_top_percentage_speed_quality_balance())
+                        .toString()))
+
+        when:
+        def result = factory.poolClient.getPool('21')
+
+        then:
+        matches result, pool_with_readonly_top_percentage_speed_quality_balance()
+    }
+
+    def "getPool with BestConcurrentSpeedQualityBalance"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/pools/21'), once())
+                .respond(response(new JsonBuilder(pool_map_with_readonly_best_concurrent_speed_quality_balance())
+                        .toString()))
+
+        when:
+        def result = factory.poolClient.getPool('21')
+
+        then:
+        matches result, pool_with_readonly_best_concurrent_speed_quality_balance()
+    }
+
     def "getTraining"() {
         setup:
         new MockServerClient('localhost', 8083)
@@ -105,6 +133,36 @@ class PoolClientImplSpec extends AbstractClientSpec {
 
         then:
         matches result.result, pool_with_readonly()
+
+    }
+
+    def "createPool with TopPercentageSpeedQualityBalance"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/pools').withBody(json(new JsonBuilder(pool_map()).toString())), once())
+                .respond(response(new JsonBuilder(pool_map_with_readonly_top_percentage_speed_quality_balance())
+                        .toString()).withStatusCode(201))
+
+        when:
+        def result = factory.poolClient.createPool(pool())
+
+        then:
+        matches result.result, pool_with_readonly_top_percentage_speed_quality_balance()
+
+    }
+
+    def "createPool with BestConcurrentSpeedQualityBalance"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/pools').withBody(json(new JsonBuilder(pool_map()).toString())), once())
+                .respond(response(new JsonBuilder(pool_map_with_readonly_best_concurrent_speed_quality_balance())
+                        .toString()).withStatusCode(201))
+
+        when:
+        def result = factory.poolClient.createPool(pool())
+
+        then:
+        matches result.result, pool_with_readonly_best_concurrent_speed_quality_balance()
 
     }
 
@@ -674,6 +732,54 @@ class PoolClientImplSpec extends AbstractClientSpec {
         matches result.result, updated_form
     }
 
+    def "Patch pool with TopPercentageSpeedQualityBalance"() {
+        given:
+        def updated_form = pool_with_readonly_top_percentage_speed_quality_balance().with {
+            priority = 42
+            it
+        }
+
+        def updated_form_map = pool_map_with_readonly_top_percentage_speed_quality_balance() + [priority: 42]
+
+        and:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/pools/21')
+                        .withMethod('PATCH')
+                        .withBody(json(new JsonBuilder([priority: 42L]) as String)), once())
+                .respond(response(new JsonBuilder(updated_form_map) as String))
+
+        when:
+        def result = factory.poolClient.patchPool('21', PoolPatchRequest.make().priority(42L).done())
+
+        then:
+        !result.newCreated
+        matches result.result, updated_form
+    }
+
+    def "Patch pool with BestConcurrentSpeedQualityBalance"() {
+        given:
+        def updated_form = pool_with_readonly_best_concurrent_speed_quality_balance().with {
+            priority = 42
+            it
+        }
+
+        def updated_form_map = pool_map_with_readonly_best_concurrent_speed_quality_balance() + [priority: 42]
+
+        and:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/pools/21')
+                        .withMethod('PATCH')
+                        .withBody(json(new JsonBuilder([priority: 42L]) as String)), once())
+                .respond(response(new JsonBuilder(updated_form_map) as String))
+
+        when:
+        def result = factory.poolClient.patchPool('21', PoolPatchRequest.make().priority(42L).done())
+
+        then:
+        !result.newCreated
+        matches result.result, updated_form
+    }
+
     def "openPool"() {
         setup:
         def operation_map = [
@@ -1113,7 +1219,7 @@ class PoolClientImplSpec extends AbstractClientSpec {
                 ],
                 status                         : 'OPEN',
                 created                        : '2017-12-03T12:03:00',
-                last_started                   : '2017-12-04T12:12:03'
+                last_started                   : '2017-12-04T12:12:03',
         ]
     }
 
@@ -1127,6 +1233,26 @@ class PoolClientImplSpec extends AbstractClientSpec {
                 last_stopped     : '2015-12-18T08:00:01',
                 last_close_reason: 'MANUAL',
                 status           : 'CLOSED'
+        ]
+    }
+
+    def pool_map_with_readonly_top_percentage_speed_quality_balance() {
+        pool_map() + [
+                id                    : '21',
+                speed_quality_balance : [
+                        type    : 'TOP_PERCENTAGE_BY_QUALITY',
+                        percent : 20
+                ]
+        ]
+    }
+
+    def pool_map_with_readonly_best_concurrent_speed_quality_balance() {
+        pool_map() + [
+                id                    : '21',
+                speed_quality_balance : [
+                        type    : 'BEST_CONCURRENT_USERS_BY_QUALITY',
+                        count   : 100
+                ]
         ]
     }
 
@@ -1211,6 +1337,7 @@ class PoolClientImplSpec extends AbstractClientSpec {
                         )
                         it
                     }
+                    speedQualityBalance = null
                     it
                 }
     }
@@ -1275,6 +1402,22 @@ class PoolClientImplSpec extends AbstractClientSpec {
             lastStarted = parseDate('2015-12-17 08:00:01')
             lastStopped = parseDate('2015-12-18 08:00:01')
             lastCloseReason = PoolCloseReason.MANUAL
+            it
+        }
+    }
+
+    def pool_with_readonly_top_percentage_speed_quality_balance() {
+        pool().with {
+            id = '21'
+            speedQualityBalance = new TopPercentageSpeedQualityBalance(20)
+            it
+        }
+    }
+
+    def pool_with_readonly_best_concurrent_speed_quality_balance() {
+        pool().with {
+            id = '21'
+            speedQualityBalance = new BestConcurrentSpeedQualityBalance(100)
             it
         }
     }
