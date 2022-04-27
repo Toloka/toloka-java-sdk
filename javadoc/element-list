@@ -6,6 +6,7 @@ ai.toloka.client.v1.impl
 ai.toloka.client.v1.impl.transport
 ai.toloka.client.v1.impl.validation
 ai.toloka.client.v1.messagethread
+ai.toloka.client.v1.metadata
 ai.toloka.client.v1.operation
 ai.toloka.client.v1.pool
 ai.toloka.client.v1.pool.dynamicoverlap
