@@ -20,6 +20,7 @@ import ai.toloka.client.v1.aggregatedsolutions.AggregatedSolutionClient;
 import ai.toloka.client.v1.assignment.AssignmentClient;
 import ai.toloka.client.v1.attachment.AttachmentClient;
 import ai.toloka.client.v1.messagethread.MessageThreadClient;
+import ai.toloka.client.v1.metadata.UserMetadataClient;
 import ai.toloka.client.v1.operation.OperationClient;
 import ai.toloka.client.v1.pool.PoolClient;
 import ai.toloka.client.v1.project.ProjectClient;
@@ -66,4 +67,6 @@ public interface TolokaClientFactory {
     MessageThreadClient getMessageThreadClient();
 
     WebhookSubscriptionClient getWebhookSubscriptionClient();
+
+    UserMetadataClient getUserMetadataClient();
 }

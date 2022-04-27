@@ -29,6 +29,7 @@ import ai.toloka.client.v1.attachment.AttachmentClient;
 import ai.toloka.client.v1.impl.transport.DefaultHttpClientConfiguration;
 import ai.toloka.client.v1.impl.validation.Assertions;
 import ai.toloka.client.v1.messagethread.MessageThreadClient;
+import ai.toloka.client.v1.metadata.UserMetadataClient;
 import ai.toloka.client.v1.operation.OperationClient;
 import ai.toloka.client.v1.pool.PoolClient;
 import ai.toloka.client.v1.project.ProjectClient;
@@ -64,6 +65,7 @@ public class TolokaClientFactoryImpl implements TolokaClientFactory {
     private UserBonusClient userBonusClient;
     private MessageThreadClient messageThreadClient;
     private WebhookSubscriptionClient webhookSubscriptionClient;
+    private UserMetadataClientImpl userMetadataClient;
 
     public TolokaClientFactoryImpl(String oauthToken) {
         Assertions.checkArgNotNull(oauthToken, "OAuth token may not be null");
@@ -239,6 +241,14 @@ public class TolokaClientFactoryImpl implements TolokaClientFactory {
             this.webhookSubscriptionClient = new WebhookSubscriptionClientImpl(this);
         }
         return webhookSubscriptionClient;
+    }
+
+    @Override
+    public UserMetadataClient getUserMetadataClient() {
+        if (userMetadataClient == null) {
+            this.userMetadataClient = new UserMetadataClientImpl(this);
+        }
+        return userMetadataClient;
     }
 
     public URI getTolokaApiUrl() {
