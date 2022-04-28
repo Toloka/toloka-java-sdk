@@ -24,6 +24,7 @@ import ai.toloka.client.v1.BatchCreateResult;
 import ai.toloka.client.v1.ModificationResult;
 import ai.toloka.client.v1.SearchResult;
 import ai.toloka.client.v1.impl.validation.Assertions;
+import ai.toloka.client.v1.webhooksubscription.WebhookPushResult;
 import ai.toloka.client.v1.webhooksubscription.WebhookSubscription;
 import ai.toloka.client.v1.webhooksubscription.WebhookSubscriptionClient;
 import ai.toloka.client.v1.webhooksubscription.WebhookSubscriptionSearchRequest;
@@ -31,6 +32,7 @@ import ai.toloka.client.v1.webhooksubscription.WebhookSubscriptionSearchRequest;
 public class WebhookSubscriptionClientImpl extends AbstractClientImpl implements WebhookSubscriptionClient {
 
     private static final String WEBHOOK_SUBSCRIPTIONS_PATH = "webhook-subscriptions/";
+    private static final String TEST_WEBHOOK_PATH = "test";
 
     WebhookSubscriptionClientImpl(TolokaClientFactoryImpl factory) {
         super(factory);
@@ -69,5 +71,13 @@ public class WebhookSubscriptionClientImpl extends AbstractClientImpl implements
     @Override
     public void deleteWebhookSubscription(String webhookSubscriptionId) {
         delete(webhookSubscriptionId, WEBHOOK_SUBSCRIPTIONS_PATH);
+    }
+
+    @Override
+    public ModificationResult<WebhookPushResult> sendTestWebhook(String webhookSubscriptionId) {
+        Assertions.checkArgNotNull(webhookSubscriptionId, "Id may not be null");
+
+        return executeSyncAction(null, WEBHOOK_SUBSCRIPTIONS_PATH, webhookSubscriptionId,
+                TEST_WEBHOOK_PATH, WebhookPushResult.class, null);
     }
 }

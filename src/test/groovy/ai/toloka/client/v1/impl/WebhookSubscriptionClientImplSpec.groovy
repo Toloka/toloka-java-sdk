@@ -17,6 +17,8 @@
 package ai.toloka.client.v1.impl
 
 import ai.toloka.client.v1.webhooksubscription.WebhookEventType
+import ai.toloka.client.v1.webhooksubscription.WebhookPushErrorType
+import ai.toloka.client.v1.webhooksubscription.WebhookPushResult
 import ai.toloka.client.v1.webhooksubscription.WebhookSubscription
 import ai.toloka.client.v1.webhooksubscription.WebhookSubscriptionSearchRequest
 import groovy.json.JsonBuilder
@@ -188,6 +190,19 @@ class WebhookSubscriptionClientImplSpec extends AbstractClientSpec {
         noExceptionThrown()
     }
 
+    def "sendTestNotification"() {
+        setup:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/webhook-subscriptions/webhook-subscription-1/test'))
+                .respond(response(new JsonBuilder(webhook_push_result_map_with_readonly()) as String))
+
+        when:
+        def result = factory.webhookSubscriptionClient.sendTestWebhook('webhook-subscription-1')
+
+        then:
+        matches result.result, webhook_push_result_with_readonly()
+    }
+
     def webhook_subscription_map() {
         [
                 event_type : 'POOL_CLOSED',
@@ -204,6 +219,17 @@ class WebhookSubscriptionClientImplSpec extends AbstractClientSpec {
         ]
     }
 
+    def webhook_push_result_map_with_readonly() {
+        [
+                success : true,
+                responseReceivedAt : '2022-04-28T23:38:00',
+                errorType : 'WRONG_STATUS_CODE',
+                originalStatusCode : 1,
+                uuids : ['uuid1', 'uuid2']
+
+        ]
+    }
+
     def webhook_subscription() {
         new WebhookSubscription(WebhookEventType.POOL_CLOSED, 'https://test.com', 'pool-1', null)
     }
@@ -212,6 +238,17 @@ class WebhookSubscriptionClientImplSpec extends AbstractClientSpec {
         webhook_subscription().with {
             id = 'webhook-subscription-1'
             created = parseDate('2018-12-03 15:36:00')
+        }
+    }
+
+    def webhook_push_result_with_readonly() {
+        new WebhookPushResult().with {
+            success = true
+            responseReceivedAt = parseDate('2022-04-28 23:38:00')
+            errorType = WebhookPushErrorType.WRONG_STATUS_CODE
+            originalStatusCode = 1
+            uuids = ["uuid1", "uuid2"]
+            it
         }
     }
 }
