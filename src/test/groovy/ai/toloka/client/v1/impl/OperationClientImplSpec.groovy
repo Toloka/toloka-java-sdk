@@ -47,6 +47,24 @@ class OperationClientImplSpec extends AbstractClientSpec {
                 finished  : '2016-10-21T15:37:02',
                 parameters: [project_id: '10']
         ]
+
+        def known_solutions_generate_operation_map = [
+                id        : 'known-solutions-generate-op-1',
+                type      : 'KNOWN_SOLUTIONS.GENERATE',
+                status    : 'SUCCESS',
+                submitted : '2022-05-11T02:32:00',
+                started   : '2022-05-11T02:32:01',
+                finished  : '2022-05-11T02:32:02',
+                parameters: [
+                        pool_id    : '10',
+                        poolName   : 'Pool 1',
+                        project_id : '12',
+                        projectName: 'project',
+                        secret     : '123abc',
+                        requesterId: 'qwe456'
+                ]
+        ]
+
         def unknown_operation_map = [
                 id        : 'unknown-1',
                 type      : 'UNKNOWN_TYPE',
@@ -66,7 +84,8 @@ class OperationClientImplSpec extends AbstractClientSpec {
         )
                 .respond(response(
                 new JsonBuilder([
-                        items   : [pool_operation_map, project_operation_map, unknown_operation_map],
+                        items   : [pool_operation_map, project_operation_map,
+                                   known_solutions_generate_operation_map, unknown_operation_map],
                         has_more: false]
                 ) as String)
         )
@@ -103,7 +122,25 @@ class OperationClientImplSpec extends AbstractClientSpec {
                 operationClient: factory.operationClient
         )
 
-        matches result.items[2], new Operation.UnknownOperation(
+        matches result.items[2], new ai.toloka.client.v1.task.KnownSolutionsGenerateOperation(
+                id : 'known-solutions-generate-op-1',
+                type : OperationType.KNOWN_SOLUTIONS_GENERATE,
+                status: OperationStatus.SUCCESS,
+                submitted: parseDate('2022-05-11 02:32:00'),
+                started: parseDate('2022-05-11 02:32:01'),
+                finished: parseDate('2022-05-11 2:32:02'),
+                parameters: new ai.toloka.client.v1.task.KnownSolutionsGenerateOperation.Parameters(
+                        poolId: '10',
+                        poolName: 'Pool 1',
+                        projectId: '12',
+                        projectName: 'project',
+                        secret: '123abc',
+                        requesterId: 'qwe456'
+                ),
+                operationClient: factory.operationClient
+        )
+
+        matches result.items[3], new Operation.UnknownOperation(
                 id: 'unknown-1',
                 type: new OperationType('UNKNOWN_TYPE'),
                 status: OperationStatus.PENDING,
@@ -149,6 +186,58 @@ class OperationClientImplSpec extends AbstractClientSpec {
                 started: parseDate('2016-03-07 15:47:21'),
                 finished: parseDate('2016-03-07 15:48:03'),
                 parameters: new ai.toloka.client.v1.pool.PoolOpenOperation.Parameters(poolId: '21'),
+                operationClient: factory.operationClient
+        )
+    }
+
+    def "getOperation; KNOWN_SOLUTIONS.GENERATE"() {
+        setup:
+        def operation_map = [
+                id        : 'known-solutions-generate-op-1',
+                type      : 'KNOWN_SOLUTIONS.GENERATE',
+                status    : 'RUNNING',
+                submitted : '2022-05-11T02:32:00',
+                started   : '2022-05-11T02:32:01',
+                parameters: [
+                        pool_id    : '10',
+                        poolName   : 'Pool 1',
+                        project_id : '12',
+                        projectName: 'project',
+                        secret     : '123abc',
+                        requesterId: 'qwe456'
+                ]
+        ]
+
+        and:
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/operations/known-solutions-generate-op-1'), exactly(2))
+                .respond(response(new JsonBuilder(operation_map).toString()).withStatusCode(200))
+
+        def completeResponseBody =
+                new JsonBuilder(operation_map + [status: 'SUCCESS', finished: '2022-05-11T02:32:02']).toString()
+        new MockServerClient('localhost', 8083)
+                .when(request('/api/v1/operations/known-solutions-generate-op-1'), once())
+                .respond(response(completeResponseBody).withStatusCode(200))
+
+        when:
+        def result = factory.operationClient.getOperation('known-solutions-generate-op-1').waitToComplete()
+
+        then:
+        matches result, new ai.toloka.client.v1.task.KnownSolutionsGenerateOperation(
+                id : 'known-solutions-generate-op-1',
+                type : OperationType.KNOWN_SOLUTIONS_GENERATE,
+                status: OperationStatus.SUCCESS,
+                submitted: parseDate('2022-05-11 02:32:00'),
+                started: parseDate('2022-05-11 02:32:01'),
+                finished: parseDate('2022-05-11 2:32:02'),
+                parameters: new ai.toloka.client.v1.task.KnownSolutionsGenerateOperation.Parameters(
+                        poolId: '10',
+                        poolName: 'Pool 1',
+                        projectId: '12',
+                        projectName: 'project',
+                        secret: '123abc',
+                        requesterId: 'qwe456'
+                ),
                 operationClient: factory.operationClient
         )
     }
