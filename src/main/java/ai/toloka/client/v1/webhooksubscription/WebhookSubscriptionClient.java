@@ -33,4 +33,6 @@ public interface WebhookSubscriptionClient {
     WebhookSubscription getWebhookSubscription(String webhookSubscriptionId);
 
     void deleteWebhookSubscription(String webhookSubscriptionId);
+
+    ModificationResult<WebhookPushResult> sendTestWebhook(String webhookSubscriptionId);
 }
