@@ -34,5 +34,5 @@ public interface WebhookSubscriptionClient {
 
     void deleteWebhookSubscription(String webhookSubscriptionId);
 
-    ModificationResult<WebhookPushResult> sendTestNotification(String webhookSubscriptionId);
+    ModificationResult<WebhookPushResult> sendTestWebhook(String webhookSubscriptionId);
 }

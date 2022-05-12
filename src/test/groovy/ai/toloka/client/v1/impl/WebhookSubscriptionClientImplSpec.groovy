@@ -197,7 +197,7 @@ class WebhookSubscriptionClientImplSpec extends AbstractClientSpec {
                 .respond(response(new JsonBuilder(webhook_push_result_map_with_readonly()) as String))
 
         when:
-        def result = factory.webhookSubscriptionClient.sendTestNotification('webhook-subscription-1')
+        def result = factory.webhookSubscriptionClient.sendTestWebhook('webhook-subscription-1')
 
         then:
         matches result.result, webhook_push_result_with_readonly()
