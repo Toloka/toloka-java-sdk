@@ -34,6 +34,7 @@ import ai.toloka.client.v1.pool.PoolCloneOperation;
 import ai.toloka.client.v1.pool.PoolCloseOperation;
 import ai.toloka.client.v1.pool.PoolOpenOperation;
 import ai.toloka.client.v1.project.ProjectArchiveOperation;
+import ai.toloka.client.v1.task.KnownSolutionsGenerateOperation;
 import ai.toloka.client.v1.task.TaskCreateBatchOperation;
 import ai.toloka.client.v1.tasksuite.TaskSuiteCreateBatchOperation;
 import ai.toloka.client.v1.training.TrainingArchiveOperation;
@@ -57,7 +58,8 @@ import ai.toloka.client.v1.userbonus.UserBonusCreateBatchOperation;
         @JsonSubTypes.Type(value = TaskCreateBatchOperation.class, name = "TASK.BATCH_CREATE"),
         @JsonSubTypes.Type(value = TaskSuiteCreateBatchOperation.class, name = "TASK_SUITE.BATCH_CREATE"),
         @JsonSubTypes.Type(value = UserBonusCreateBatchOperation.class, name = "USER_BONUS.BATCH_CREATE"),
-        @JsonSubTypes.Type(value = AggregatedSolutionOperation.class, name = "SOLUTION.AGGREGATE")
+        @JsonSubTypes.Type(value = AggregatedSolutionOperation.class, name = "SOLUTION.AGGREGATE"),
+        @JsonSubTypes.Type(value = KnownSolutionsGenerateOperation.class, name = "KNOWN_SOLUTIONS.GENERATE")
 })
 public abstract class Operation<P, T extends Operation<P, T>> {
 

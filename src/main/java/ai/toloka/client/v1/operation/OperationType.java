@@ -49,6 +49,8 @@ public class OperationType extends FlexibleEnum<OperationType> {
 
     public static final OperationType SOLUTION_AGGREGATE = new OperationType("SOLUTION.AGGREGATE");
 
+    public static final OperationType KNOWN_SOLUTIONS_GENERATE = new OperationType("KNOWN_SOLUTIONS.GENERATE");
+
     private static final OperationType[] VALUES = {
             PROJECT_ARCHIVE,
 
@@ -65,6 +67,8 @@ public class OperationType extends FlexibleEnum<OperationType> {
             ANALYTICS,
 
             SOLUTION_AGGREGATE,
+
+            KNOWN_SOLUTIONS_GENERATE,
 
             PSEUDO
     };
