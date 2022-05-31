@@ -43,6 +43,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,6 +171,7 @@ public abstract class AbstractClientImpl {
                 }
 
                 if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND) {
+                    EntityUtils.consumeQuietly(response.getEntity());
                     return null;
                 }
 
