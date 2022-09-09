@@ -67,35 +67,35 @@ public class TolokaClientFactoryImpl implements TolokaClientFactory {
     private WebhookSubscriptionClient webhookSubscriptionClient;
     private UserMetadataClientImpl userMetadataClient;
 
-    public TolokaClientFactoryImpl(String oauthToken) {
-        Assertions.checkArgNotNull(oauthToken, "OAuth token may not be null");
+    public TolokaClientFactoryImpl(String tokenOrKey) {
+        Assertions.checkArgNotNull(tokenOrKey, "Token or Api Key must be null provided");
 
         this.tolokaApiUrl = DefaultHttpClientConfiguration.DEFAULT_TOLOKA_SANDBOX_URI;
-        this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(oauthToken);
+        this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(tokenOrKey);
     }
 
     /**
      * @param tolokaApiUrl path to toloka API
-     * @param oauthToken   OAuth token, may be obtained from GUI
+     * @param tokenOrKey   OAuth token, may be obtained from GUI
      */
-    public TolokaClientFactoryImpl(URI tolokaApiUrl, String oauthToken) {
+    public TolokaClientFactoryImpl(URI tolokaApiUrl, String tokenOrKey) {
         Assertions.checkArgNotNull(tolokaApiUrl, "Toloka API URL may not be null");
-        Assertions.checkArgNotNull(oauthToken, "OAuth token may not be null");
+        Assertions.checkArgNotNull(tokenOrKey, "Token or Api Key must be null provided");
 
         this.tolokaApiUrl = tolokaApiUrl;
-        this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(oauthToken);
+        this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(tokenOrKey);
     }
 
     /**
      * @param tolokaApiUrl path to toloka API
-     * @param oauthToken   OAuth token, may be obtained from GUI
+     * @param tokenOrKey   OAuth token, may be obtained from GUI
      */
-    public TolokaClientFactoryImpl(String tolokaApiUrl, String oauthToken) {
+    public TolokaClientFactoryImpl(String tolokaApiUrl, String tokenOrKey) {
         Assertions.checkArgNotNull(tolokaApiUrl, "Toloka API URL may not be null");
-        Assertions.checkArgNotNull(oauthToken, "OAuth token may not be null");
+        Assertions.checkArgNotNull(tokenOrKey, "Token or Api Key must be null provided");
 
         this.tolokaApiUrl = URI.create(tolokaApiUrl);
-        this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(oauthToken);
+        this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(tokenOrKey);
     }
 
     public TolokaClientFactoryImpl(URI tolokaApiUrl, HttpClient httpClient) {
