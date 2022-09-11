@@ -139,11 +139,6 @@ uploadArchives {
                         name 'Timur Tibeyev'
                         email 'timurtibeyev@yandex-team.ru'
                     }
-                    developer {
-                        id 'JaneKirillova'
-                        name 'Evgeniia Kirillova'
-                        email 'kirijane@yandex-team.ru'
-                    }
                 }
             }
         }
