@@ -16,10 +16,7 @@
 
 package ai.toloka.client.v1.impl.transport;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.util.Properties;
 
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
@@ -71,15 +68,7 @@ public class DefaultHttpClientConfiguration {
     }
 
     private static String getVersion() {
-        Properties prop = new Properties();
-        try {
-            InputStream input = DefaultHttpClientConfiguration.class
-                    .getClassLoader()
-                    .getResourceAsStream("version.properties");
-            prop.load(input);
-        } catch (IOException ignored) {
-            // ignored
-        }
-        return prop.getProperty("version", "undefined");
+        String version = DefaultHttpClientConfiguration.class.getPackage().getImplementationVersion();
+        return null == version ? "undefined" : version;
     }
 }
