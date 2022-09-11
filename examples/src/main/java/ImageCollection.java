@@ -66,7 +66,7 @@ import ai.toloka.client.v1.tasksuite.TaskSuite;
 /**
  * Example of using toloka-java-sdk for image collection.
  *
- * @see <a href="https://github.com/Toloka/toloka-java-sdk/blob/example_image_collection/examples/image_collection">
+ * @see <a href="https://github.com/Toloka/toloka-java-sdk/tree/master/examples/image_collection">
  *          README.md</a>
  */
 

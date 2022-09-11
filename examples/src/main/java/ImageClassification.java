@@ -67,7 +67,7 @@ import ai.toloka.client.v1.userrestriction.UserRestrictionScope;
  * Example of using toloka-java-sdk for image classifications.
  * To find details read
  *
- * @see <a href="https://github.com/JaneKirillova/toloka-java-sdk/tree/example_image_classification/examples/image_classification">
+ * @see <a href="https://github.com/Toloka/toloka-java-sdk/tree/master/examples/image_classification">
  *          README.md</a>
  */
 
