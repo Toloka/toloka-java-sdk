@@ -28,8 +28,8 @@ import static java.util.Collections.singletonList;
 
 public class DefaultHttpClientConfiguration {
 
-    public static final URI DEFAULT_TOLOKA_PROD_URI = URI.create("https://toloka.yandex.com/api");
-    public static final URI DEFAULT_TOLOKA_SANDBOX_URI = URI.create("https://sandbox.toloka.yandex.com/api");
+    public static final URI DEFAULT_TOLOKA_PROD_URI = URI.create("https://toloka.dev/api");
+    public static final URI DEFAULT_TOLOKA_SANDBOX_URI = URI.create("https://sandbox.toloka.dev/api");
 
     public static final int DEFAULT_CONNECTION_TIMEOUT = 10 * 1000;
     public static final int DEFAULT_SOCKET_TIMEOUT = 120 * 1000;
