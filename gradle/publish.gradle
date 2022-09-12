@@ -1,0 +1,93 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+ext.sharedManifest = manifest {
+    attributes 'Implementation-Vendor': group,
+            'Implementation-Title': name,
+            'Implementation-Version': version
+}
+
+jar {
+    manifest {
+        from sharedManifest
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set('javadoc')
+    from javadoc
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+    manifest {
+        from sharedManifest
+    }
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+publishing {
+    publications {
+        mavenCentral(MavenPublication) {
+            customizePom(pom)
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+signing {
+    required { gradle.taskGraph.hasTask('publish') }
+    sign publishing.publications.mavenCentral
+}
+
+void customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        def githubPage = 'http://github.com/Toloka/toloka-java-sdk'
+
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            name 'Toloka Java SDK'
+            description 'Toloka has a powerful open API, it allows you to integrate an on-demand workforce directly into your processes, and to build scalable and fully automated human-in-the-loop ML pipelines.'
+
+            url 'https://toloka.ai'
+
+            organization {
+                name 'Toloka.ai'
+                url 'https://toloka.ai'
+            }
+            licenses {
+                license {
+                    name 'Apache License 2.0'
+                    url "http://www.apache.org/licenses/LICENSE-2.0"
+                }
+            }
+            scm {
+                url githubPage
+                connection "scm:git:${githubPage}.git"
+                developerConnection 'scm:git:ssh://github.com:Toloka/toloka-java-sdk.git'
+            }
+            issueManagement {
+                system 'GitHub'
+                url "${githubPage}/issues"
+            }
+            developers {
+                developer {
+                    id 'timurt'
+                    name 'Timur Tibeyev'
+                    email 'timurtibeyev@yandex-team.ru'
+                }
+            }
+        }
+    }
+}

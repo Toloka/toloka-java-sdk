@@ -1,8 +1,7 @@
 plugins {
     id 'java'
+    id 'checkstyle'
 }
-
-apply plugin: 'checkstyle'
 
 group 'ai.toloka'
 version '0.0.1-SNAPSHOT'
@@ -11,19 +10,20 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    implementation 'ai.toloka:toloka-java-sdk:0.0.1'
-}
-
 test {
     useJUnitPlatform()
 }
 
 checkstyle {
     toolVersion '8.45'
-    configDir rootProject.file('../config')
+    configDirectory.set rootProject.file('../config')
     ignoreFailures false
     showViolations true
+}
+
+dependencies {
+    implementation 'ai.toloka:toloka-java-sdk'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
