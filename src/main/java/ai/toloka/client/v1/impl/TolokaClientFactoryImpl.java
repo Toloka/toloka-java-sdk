@@ -75,24 +75,24 @@ public class TolokaClientFactoryImpl implements TolokaClientFactory {
     }
 
     /**
-     * @param tolokaApiUrl path to toloka API
-     * @param tokenOrKey   OAuth token, may be obtained from GUI
+     * @param tolokaApiUrl path to Toloka API
+     * @param tokenOrKey   Token or Api Key may be obtained from web UI
      */
     public TolokaClientFactoryImpl(URI tolokaApiUrl, String tokenOrKey) {
         Assertions.checkArgNotNull(tolokaApiUrl, "Toloka API URL may not be null");
-        Assertions.checkArgNotNull(tokenOrKey, "Token or Api Key must be null provided");
+        Assertions.checkArgNotNull(tokenOrKey, "Token or Api Key must be provided");
 
         this.tolokaApiUrl = tolokaApiUrl;
         this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(tokenOrKey);
     }
 
     /**
-     * @param tolokaApiUrl path to toloka API
-     * @param tokenOrKey   OAuth token, may be obtained from GUI
+     * @param tolokaApiUrl path to Toloka API
+     * @param tokenOrKey   Token or Api Key may be obtained from web UI
      */
     public TolokaClientFactoryImpl(String tolokaApiUrl, String tokenOrKey) {
         Assertions.checkArgNotNull(tolokaApiUrl, "Toloka API URL may not be null");
-        Assertions.checkArgNotNull(tokenOrKey, "Token or Api Key must be null provided");
+        Assertions.checkArgNotNull(tokenOrKey, "Token or Api Key must be provided");
 
         this.tolokaApiUrl = URI.create(tolokaApiUrl);
         this.httpClient = DefaultHttpClientConfiguration.buildDefaultClient(tokenOrKey);
