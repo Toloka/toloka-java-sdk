@@ -110,7 +110,7 @@ public class DefaultHttpClientConfiguration {
                 .filter(c -> '.' == c)
                 .count();
 
-        if (1 == dotCount) {
+        if (2 == dotCount) {
             int dotIdx = cred.indexOf('.');
 
             return dotIdx > 21 && dotIdx < 25;

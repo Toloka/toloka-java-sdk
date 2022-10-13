@@ -6,20 +6,20 @@ class DefaultHttpClientConfigurationSpec extends Specification {
 
     def "default client should recognize auth format and provide correct header; #_authInput"() {
         expect:
-        DefaultHttpClientConfiguration.recognizeAuthFormat(_authInput)
+        DefaultHttpClientConfiguration.recognizeAuthFormat(_authInput) == _expected
 
         where:
-        _authInput                                  | _expected
-        'ALPHANUMERICSTRING123'                     | 'OAuth ALPHANUMERICSTRING123'
-        '   ALPHANUMERICSTRING123+SPACES  '         | 'OAuth ALPHANUMERICSTRING123'
-        'XXXXXXXXXXXXXXXXXXXXXX.XXXXX'              | 'ApiKey XXXXXXXXXXXXXXXXXXXXXX.XXXXX'
-        'XXXXXXXXXXXXXXXXXXXXXXXX.XXXXX'            | 'ApiKey XXXXXXXXXXXXXXXXXXXXXXXX.XXXXX'
-        '   XXXXXXXXXXXXXXXXXXXXXXXX.WITH+SPACES  ' | 'ApiKey XXXXXXXXXXXXXXXXXXXXXXXX.XXXXX'
-        'XXXXXXXXXXXXXXXXXXXXXXX.XX.XXX'            | 'OAuth XXXXXXXXXXXXXXXXXXXXXXX.XX.XXX'
-        'XXXXX.XXXXX'                               | 'OAuth XXXXX.XXXXX'
-        'OAuth TYPE+PROVIDED'                       | 'OAuth TYPE+PROVIDED'
-        'ApiKey TYPE+PROVIDED'                      | 'ApiKey TYPE+PROVIDED'
-        '  ApiKey MANY+SPACES+AROUND  '             | 'ApiKey TYPE+PROVIDED'
+        _authInput                                      | _expected
+        'ALPHANUMERICSTRING123'                         | 'OAuth ALPHANUMERICSTRING123'
+        '   ALPHANUMERICSTRING123+SPACES  '             | 'OAuth ALPHANUMERICSTRING123%2BSPACES'
+        'XXXXXXXXXXXXXXXXXXXXXX.YYY.XXXXX'              | 'ApiKey XXXXXXXXXXXXXXXXXXXXXX.YYY.XXXXX'
+        'XXXXXXXXXXXXXXXXXXXXXXXX.YYY.XXXXX'            | 'ApiKey XXXXXXXXXXXXXXXXXXXXXXXX.YYY.XXXXX'
+        '   XXXXXXXXXXXXXXXXXXXXXXXX.YYY.WITH+SPACES  ' | 'ApiKey XXXXXXXXXXXXXXXXXXXXXXXX.YYY.WITH%2BSPACES'
+        'XXXXXXXXXXXXXXXXXXXXXXX.XX.X.XX'               | 'OAuth XXXXXXXXXXXXXXXXXXXXXXX.XX.X.XX'
+        'XXXXX.XXXXX'                                   | 'OAuth XXXXX.XXXXX'
+        'OAuth TYPE+PROVIDED'                           | 'OAuth TYPE%2BPROVIDED'
+        'ApiKey TYPE+PROVIDED'                          | 'ApiKey TYPE%2BPROVIDED'
+        '  ApiKey MANY+SPACES+AROUND  '                 | 'ApiKey MANY%2BSPACES%2BAROUND'
     }
 
     def "malformed auth formats lead to Argument Exception"() {
