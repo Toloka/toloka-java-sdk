@@ -2,40 +2,35 @@
 
 [![License](https://img.shields.io/pypi/l/toloka-kit.svg)](https://github.com/toloka/toloka-kit/blob/master/LICENSE)
 
-[**<span style="color:red">Documentation</span>**](https://toloka.github.io/toloka-java-sdk/javadoc/)
+[Toloka website](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk) |
+[API reference](https://toloka.ai/docs/api/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk) | [Toloka Java SDK documentation](https://toloka.github.io/toloka-java-sdk/javadoc/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk)
 
-[Website](https://toloka.ai) |
-[API Documentation](https://toloka.ai/ru/docs/api/concepts/about.html?lang=en) |
-[Platform](http://toloka.yandex.com)
+Toloka Java SDK is a Java library for working with [Toloka API](https://toloka.ai/docs/api/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk).
 
-Designed by engineers for engineers, Toloka lets you integrate an on-demand workforce directly into your processes. Our cloud-based crowdsourcing platform is a fast and efficient way to collect and label large data sources for machine learning and other business purposes.
+The API allows you to build scalable and fully automated human-in-the-loop ML pipelines, and integrate them into your processes. The SDK makes integration easier.
 
-Main advantages of Toloka:
-- **Top-quality data** -  Collect and annotate training data that meets and exceeds industry quality standards thanks to multiple quality control methods and mechanisms available in Toloka.
-- **Scalable projects** - Have any amounts of image, text, speech, audio, or video data collected and labeled for you by millions of skilled Toloka users across the globe.
-- **Cost-efficiency** - Save time and money with this purpose-built platform for handling large-scale data collection and annotation projects, on-demand 24/7, at your own price and within your timeframe.
-- **Free, powerful API** - Build scalable and fully automated human-in-the-loop machine learning pipelines with a powerful open API.
-
-Requirements
+Prerequisites
 --------------
-- Java 11+
-- Register in [Toloka.ai](https://toloka.ai/) as requester. Registration process described [here.](https://toloka.ai/ru/docs/guide/concepts/access.html?lang=en)
-- [Topping up your account.](https://toloka.ai/ru/docs/guide/concepts/refill.html?lang=en)
-- Getting an OAuth. Learn more in [help](https://toloka.ai/ru/docs/api/concepts/access.html?lang=en) and in the image below.
+- You are using Java 11 or higher.
+- You are [registered](https://toloka.ai/docs/guide/concepts/access/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk) in Toloka as a requester.
+- You have [topped up](https://toloka.ai/docs/guide/refill/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk) your Toloka account.
+- You have [set up an OAuth token](https://toloka.ai/docs/api/access/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk) to access Toloka API.
 
-![How to get OAuth token](https://tlk.s3.yandex.net/toloka-kit/OAuth.png "How to get OAuth token")
-
-Useful Links
+Documentation
 --------------
-- [Toloka homepage.](https://toloka.ai/)
-- [Toloka requester's guide.](https://toloka.ai/ru/docs/guide/index.html?lang=en)
-- We recommend that you first get acquainted with Toloka through the web interface and implement [one of the tutorials.](https://toloka.ai/ru/docs/guide/concepts/usecases.html)
-- [Toloka API documentation.](https://toloka.ai/docs/api/concepts/about.html?lang=en)
+- [Toloka Java SDK documentation](https://toloka.github.io/toloka-java-sdk/javadoc/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk)
+- [Toloka API reference](https://toloka.ai/docs/api/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk)
+- [Toloka web interface documentation](https://toloka.ai/docs/guide/overview/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk)
 
-Questions and bug reports
+Support
 --------------
-* Join our English-speaking [slack community](https://toloka.ai/community) for both tech and abstract questions.
+- To suggest a feature or report a bug, go to our [issues page](https://github.com/Toloka/toloka-java-sdk/issues).
+- If you have any questions, feel free to ask our [Slack community](https://toloka.ai/community/?utm_source=github&utm_medium=site&utm_campaign=tolokajavasdk).
+
+Contributing
+--------------
+Feel free to contribute to Toloka Java SDK, and please check out our [contributing guide](https://github.com/Toloka/toloka-java-sdk/blob/master/CONTRIBUTING.md).
 
 License
 -------
-© YANDEX LLC, 2020-2021. Licensed under the Apache License, Version 2.0. See LICENSE file for more details.
+© YANDEX LLC, 2020. Licensed under the Apache License, Version 2.0. See LICENSE file for more details.
